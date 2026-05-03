@@ -23,12 +23,20 @@ class Migration(migrations.Migration):
             name='model',
             options={'ordering': ['name']},
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='brand',
+            name='brand_id',
+        ),
+        migrations.AddField(
             model_name='brand',
             name='brand_id',
             field=models.IntegerField(default=customAdmin.models.generate_unique_id, editable=False, unique=True),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='category',
+            name='category_id',
+        ),
+        migrations.AddField(
             model_name='category',
             name='category_id',
             field=models.IntegerField(default=customAdmin.models.generate_unique_id, editable=False, unique=True),
@@ -43,7 +51,11 @@ class Migration(migrations.Migration):
             name='slug',
             field=models.SlugField(blank=True, max_length=100, unique=True),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='model',
+            name='model_id',
+        ),
+        migrations.AddField(
             model_name='model',
             name='model_id',
             field=models.IntegerField(default=customAdmin.models.generate_unique_id, editable=False, unique=True),
