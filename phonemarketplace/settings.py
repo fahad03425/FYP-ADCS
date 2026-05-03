@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,11 +28,11 @@ SECRET_KEY = 'django-insecure-553xo&)es(l_8rxfzm=94j%z5*)f=1+^h(5-_i!$s0r3*+bgq+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'your-system-email@gmail.com'
-EMAIL_HOST_PASSWORD = 'hbkb fkln bstx dcrf'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'your-system-email@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "fyp2-6d97.onrender.com,fyp2-adcs.onrender.com,127.0.0.1,localhost").split(",")
@@ -54,11 +55,10 @@ INSTALLED_APPS = [
     'customAdmin',
     'tailwind',
     'theme',
-  
 ]
 
-TAILWIND_APP_NAME='theme'
-INTERNAL_IPS= ['127.0.0.1']
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = ['127.0.0.1']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -171,7 +171,9 @@ WHITENOISE_MANIFEST_STRICT = False
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
+# NPM path — Windows only (django-tailwind local dev)
+if sys.platform == 'win32':
+    NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
 
 # settings.py
 AUTHENTICATION_BACKENDS = [
