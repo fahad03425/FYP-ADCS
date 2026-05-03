@@ -34,7 +34,7 @@ EMAIL_USE_TLS = True
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "fyp2-6d97.onrender.com,fyp-adcs.onrender.com,127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "fyp2-6d97.onrender.com,fyp2-adcs.onrender.com,127.0.0.1,localhost").split(",")
 
 #admin customization
 
