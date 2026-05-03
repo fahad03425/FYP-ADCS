@@ -1,0 +1,109 @@
+{% extends 'portalbase.html' %}
+
+{% block title %}
+Seller | Analytics
+{% endblock %}
+
+{% block pagetitle %}
+Analytics
+{% endblock %}
+
+{% block vcontent %}
+{% load static %}
+<div class="pl-10 pt-10 pr-10 h-screen w-full bg-bluish">
+    
+    <div class="p-8 bg-white rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold mb-3">Sales</h1>
+        <div class="bg-white p-9 rounded-lg" style="width: 80vw; height: 60vh;">
+            <canvas id="salesChart" width="100%" height="100%"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+
+    // Create the chart instance
+    const salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],  // Initially empty, will be populated with real data
+            datasets: [{
+                label: 'Sales in PKR',
+                data: [],
+                fill: true,
+                backgroundColor: createGradient(ctx),  // Function to create gradient
+                borderColor: '#4266b0',
+                borderWidth: 2,
+                tension: 0.4,
+                pointBackgroundColor: 'rgb(66, 102, 176)',
+                pointRadius: 4
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) { return 'PKR ' + value; },
+                        font: { size: 12 },
+                        color: '#4b5563'
+                    },
+                    grid: { color: '#e5e7eb' }
+                },
+                x: {
+                    ticks: { font: { size: 12 }, color: '#4b5563' },
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: { display: true, labels: { font: { size: 14 } } },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return 'PKR ' + tooltipItem.raw.toLocaleString();
+                        }
+                    }
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // Function to create the gradient for the chart background
+    function createGradient(ctx) {
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(66, 102, 176, 0.7)');
+        gradient.addColorStop(1, 'rgba(66, 102, 176, 0)');
+        return gradient;
+    }
+
+    // Function to update the chart with new data
+    function updateChartData(chart, data) {
+        chart.data.labels = data.dates;  // Update labels
+        chart.data.datasets[0].data = data.amounts;  // Update data points
+        chart.update();  // Refresh the chart
+    }
+
+    // Function to fetch data and update the chart at regular intervals
+    function fetchDataAndUpdateChart() {
+        fetch("{% static 'data/sales_data.json' %}")
+        .then(response => response.json())
+        .then(data => {
+            updateChartData(salesChart, data);  // Call function to update chart
+        })
+        .catch(error => console.error('Error loading sales data:', error));
+    }
+
+    // Fetch initial data and update chart
+    fetchDataAndUpdateChart();
+
+    // Set interval to update chart every 30 seconds (30000 ms)
+    setInterval(fetchDataAndUpdateChart, 3000);
+});
+</script>
+{% endblock %}
+

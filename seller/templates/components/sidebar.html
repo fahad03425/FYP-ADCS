@@ -1,0 +1,78 @@
+{% load static %}
+<div class="lg:flex lg:flex-col lg:w-64 bg-white shadow-lg h-full relative">
+    <!-- Logo -->
+    <div class="flex items-center justify-center py-6">
+       <a href="{% url 'seller:portal' %}">
+        <img class="h-14" src="{% static 'logo.jpg' %}" alt="Logo">
+        </a>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="mt-10 space-y-2 flex-grow">
+
+        <a href="{% url 'seller:portal' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Dashboard
+        </a>
+
+        <!-- Product Management with Dropdown -->
+        <div class="relative">
+            <a href="#" id="productManagementLink" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+                Product Management
+            </a>
+            <!-- Dropdown for Product Management -->
+            <div class="hidden ml-6 space-y-2 mt-2" id="productDropdown">
+                <a href="{% url 'seller:addproducts' %}" class="block py-2.5 px-4 text-base text-gray-600 hover:bg-gray-100 hover:text-bluish rounded">
+                    Add Product
+                </a>
+                <a href="{% url 'seller:listedproducts' %}" class="block py-2.5 px-4 text-base text-gray-600 hover:bg-gray-100 hover:text-bluish rounded">
+                    Listed Products
+                </a>
+            </div>
+        </div>
+
+        <!-- Order Management -->
+        <a href="{% url 'seller:orders' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Order Management
+        </a>
+        
+        <!-- Store Management -->
+        <a href="{% url 'seller:mystore' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Store Management
+        </a>
+        
+        <!-- Analytics -->
+        <a href="{% url 'seller:analytics' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Analytics
+        </a>
+         
+         <!-- Payments -->
+        <a href="{% url 'seller:payments' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Payments
+        </a>
+
+        <!-- Support -->
+        <a href="{% url 'seller:support' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Support
+        </a>
+    </nav>
+
+    <!-- Account Settings - anchored to the bottom -->
+    <div class="absolute bottom-0 w-full">
+        <a href="{% url 'seller:accountsettings' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Account Settings
+        </a>
+    </div>
+</div>
+
+<!-- JavaScript for Dropdown Toggle -->
+<script>
+    // Get the product management link and the dropdown menu
+    const productManagementLink = document.getElementById('productManagementLink');
+    const productDropdown = document.getElementById('productDropdown');
+    
+    // Add click event listener to toggle the visibility of the dropdown
+    productManagementLink.addEventListener('click', (event) => {
+        event.preventDefault();  // Prevent the default link action
+        productDropdown.classList.toggle('hidden');
+    });
+</script>

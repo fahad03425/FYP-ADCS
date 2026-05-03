@@ -1,0 +1,258 @@
+{% extends 'adminBase.html' %}
+
+{% block title %}
+Admin | Specification
+{% endblock %}
+
+{% block pagetitle %}
+Specification
+{% endblock %}
+
+{% block bcontent %}
+<div class="p-6">
+  <!-- Add Specification Button -->
+  <button id="addSpecificationBtn" class="bg-bluish text-white font-bold mb-6 py-2 px-10 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+    Add Specification
+  </button>
+
+  <!-- Popup Modal -->
+  <div id="specificationPopup" class="hidden fixed inset-0 z-50 items-center justify-center">
+    <!-- Background Overlay -->
+    <div id="popupOverlay" class="absolute inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm"></div>
+
+    <!-- Popup Content -->
+<div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative z-10">
+  <!-- Close Button -->
+  <button id="closePopupBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+
+  <!-- Popup Header -->
+  <h2 class="text-2xl font-semibold mb-4 text-center text-bluish">Add Specification</h2>
+
+  <!-- Specification Form -->
+  <form id="specificationForm">
+    {% csrf_token %}
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Category Selection -->
+      <div class="mb-1">
+        <label for="category" class="block text-lg font-medium">Category</label>
+        <select id="category" class="w-full p-2 mt-2 border border-gray-300 rounded-lg">
+          <option value="">Select a Category</option>
+          {% for category in categories %}
+          <option value="{{ category.category_id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Brand Selection -->
+<div class="mb-1">
+  <label for="brand" class="block text-lg font-medium">Brand</label>
+  <select id="brand" name="brand" class="w-full p-2 mt-2 border border-gray-300 rounded-lg">
+    <option value="">Select a Brand</option>
+    {% for brand in brands %}
+    <option value="{{ brand.id }}">{{ brand.name }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<!-- Model Selection -->
+<div class="mb-1">
+  <label for="model" class="block text-lg font-medium">Model</label>
+  <select id="model" name="model" class="w-full p-2 mt-2 border border-gray-300 rounded-lg">
+    <option value="">Select a Model</option>
+    <!-- Dynamically populated -->
+  </select>
+</div>
+
+      <!-- RAM Input -->
+      <div class="mb-1">
+        <label for="ram" class="block text-lg font-medium">RAM</label>
+        <input id="ram" name="ram" type="text" class="w-full p-2 mt-2 border border-gray-300 rounded-lg" placeholder="Enter RAM (e.g., 8GB)">
+      </div>
+
+      <!-- Storage Input -->
+      <div class="mb-1">
+        <label for="memory" class="block text-lg font-medium">Storage</label>
+        <input id="memory" name="memory" type="text" class="w-full p-2 mt-2 border border-gray-300 rounded-lg" placeholder="Enter Memory (e.g., 256GB)">
+      </div>
+
+      <!-- Battery Input -->
+      <div class="mb-1">
+        <label for="battery" class="block text-lg font-medium">Battery</label>
+        <input id="battery" name="battery" type="text" class="w-full p-2 mt-2 border border-gray-300 rounded-lg" placeholder="Enter Battery (e.g., 4000mAh)">
+      </div>
+
+      <!-- Sim Type -->
+      <div class="mb-1">
+        <label for="sim_type" class="block text-lg font-medium">Sim Type</label>
+        <select id="sim_type" name="sim_type" class="w-full p-2 mt-2 border border-gray-300 rounded-lg">
+          <option value="Single Sim">Single Sim</option>
+          <option value="Dual Sim">Dual Sim</option>
+        </select>
+      </div>
+
+      <!-- E-Sim -->
+      <div class="mb-1">
+        <label for="e_sim" class="block text-lg font-medium">E-Sim</label>
+        <select id="e_sim" name="e_sim" class="w-full p-2 mt-2 border border-gray-300 rounded-lg">
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+</div>
+    <!-- Submit Button -->
+    <div class="flex justify-center mt-4" >
+      <button type="submit" class="bg-bluish text-white py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none">
+        Add Specification
+      </button>
+    </div>
+  </form>
+</div>
+
+  </div>
+
+ <!-- Specifications List -->
+<div id="specificationsList" class="flex flex-col space-y-4">
+  {% for specification in specifications %}
+  <!-- Dynamic Specification Row -->
+  <div class="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
+    <div>
+      <p class="text-lg font-semibold text-gray-800">
+        Model: {{ specification.model.name }}
+      </p>
+      <p class="text-sm text-gray-600">
+        RAM: {{ specification.ram }} | Storage: {{ specification.storage }} | Battery: {{ specification.battery }} | Sim Type: {{ specification.sim_type }} | E-Sim: {% if specification.e_sim %}Yes{% else %}No{% endif %}
+      </p>
+    </div>
+    <div class="flex space-x-2">
+      <!-- Edit Button -->
+      <a href="{% url 'customAdmin:specification' %}" class="bg-bluish text-white font-bold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+        Edit
+      </a>
+
+      <!-- Delete Button -->
+      <button data-model-id="{{ specification.model.model_id }}" class="deleteSpecificationBtn bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50">
+         Delete
+      </button>
+    </div>
+  </div>
+  {% empty %}
+  <!-- Message if no specifications exist -->
+  <div class="text-center bg-gray-100 p-4 rounded-lg shadow-md">
+    <p class="text-lg font-semibold text-gray-800">No specifications found.</p>
+  </div>
+  {% endfor %}
+</div>
+</div>
+
+<!-- Script for Handling Popup -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const addSpecificationBtn = document.getElementById('addSpecificationBtn');
+    const specificationPopup = document.getElementById('specificationPopup');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+    const popupOverlay = document.getElementById('popupOverlay');
+
+    // Show the popup
+    addSpecificationBtn.addEventListener('click', () => {
+      specificationPopup.classList.remove('hidden');
+      specificationPopup.classList.add('flex');
+      document.body.classList.add('overflow-hidden');
+    });
+
+    // Close the popup
+    closePopupBtn.addEventListener('click', closePopup);
+    popupOverlay.addEventListener('click', closePopup);
+
+    function closePopup() {
+      specificationPopup.classList.add('hidden');
+      specificationPopup.classList.remove('flex');
+      document.body.classList.remove('overflow-hidden');
+    }
+  });
+
+//Get models by brand
+document.getElementById('brand').addEventListener('change', function () {
+    const brandId = this.value;  // Get selected brand ID
+    console.log('Brand changed:', brandId); // Log within the event listener
+    const modelDropdown = document.getElementById('model');  // Get the model dropdown
+
+    // Clear the model dropdown
+    modelDropdown.innerHTML = '<option value="">Select a Model</option>';
+
+    if (brandId) {
+        // Make an AJAX request to fetch models
+        fetch(`/seller/get-models/?brand_id=${brandId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Populate the dropdown with models
+                data.models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.id;
+                    option.textContent = model.name;
+                    modelDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching models:', error));
+    }
+});
+
+document.getElementById('specificationForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const formData = new FormData(this); // Gather all form data
+
+    fetch('/admin/specification/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}', // CSRF for Django
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.success) {
+            alert('Specification added successfully!');
+            location.reload();
+        } else {
+            alert('Failed to add specification: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+document.querySelectorAll('.deleteSpecificationBtn').forEach(button => {
+    button.addEventListener('click', function () {
+        const modelId = this.getAttribute('data-model-id');  // Get the model_id
+
+        if (confirm('Are you sure you want to delete the specifications for this model?')) {
+            // Make a POST request to delete the specifications for the model
+            fetch(`/admin/delete-specification/${modelId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // CSRF token for Django
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the specification row from the UI
+                    this.closest('.flex').remove();
+                    alert('Specifications deleted successfully!');
+                    location.reload();
+                } else {
+                    alert('Failed to delete specifications: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    });
+});
+
+
+</script>
+{% endblock %}

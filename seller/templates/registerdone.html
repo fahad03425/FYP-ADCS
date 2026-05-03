@@ -1,0 +1,60 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Complete</title>
+    {% tailwind_css %}
+  </head>
+
+  <body >
+    <!-- Include Top Banner -->
+    {% include 'components/topbar_banner.html' %}
+
+    <!-- Include Navbar -->
+    {% include 'components/navbar.html' %}
+
+    <!-- Content Section -->
+    <div class="min-h-screen flex items-center justify-center py-10 bg-gray-100">
+      <div class="container mx-auto px-4">
+        {% block content %}
+        <div id="thankYouMessage" class="fixed inset-0 z-50  flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Thank You for Registering!</h2>
+            <div class="flex justify-center mb-6">
+              <img src="{% static 'check (2).png' %}" alt="check mark" class="w-24 h-24" />
+            </div>
+            <p class="text-lg text-gray-700 font-medium mb-4">
+              Our team will contact you within 2 business days.
+            </p>
+            <a
+              class="bg-blue-500 text-white py-2 px-6 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              aria-label="Close Thank You Message"
+              href="/"
+            >
+              Close
+            </a>
+          </div>
+        </div>
+        {% endblock %}
+      </div>
+    </div>
+
+    <!-- Include Footer -->
+    {% include 'components/footer.html' %}
+
+    <!-- JavaScript to Toggle Thank-You Message -->
+    <script>
+      // Function to toggle the display of the thank you message
+      function toggleThankYouMessage() {
+        const message = document.getElementById('thankYouMessage');
+        message.classList.toggle('hidden');
+      }
+
+      // Uncomment below if you want to show the message on page load
+      // window.onload = toggleThankYouMessage;
+    </script>
+  </body>
+</html>

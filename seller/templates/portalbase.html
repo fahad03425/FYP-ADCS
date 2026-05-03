@@ -1,0 +1,110 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} Dashboard {% endblock %}</title>
+    {% tailwind_css %}
+
+<style>
+  @view-transition {
+    navigation: auto;
+  }
+  body {
+    animation: fadeInPage 0.4s ease-out forwards;
+  }
+  @keyframes fadeInPage {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+   .alert {
+    position: relative;
+    animation: slideInLeft 0.5s ease-in-out, fadeOut 4s 3s forwards;
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+</style>
+</head>
+<body class="bg-bluish">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar (responsive) -->
+        <div class="lg:hidden bg-white shadow-md">
+            <button id="sidebarToggle" class="p-4 focus:outline-none">
+                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Sidebar component -->
+        <div id="sidebar" class="hidden lg:block">
+            {% include 'components/sidebar.html' %}
+        </div>
+
+        <!-- Main Dashboard Area -->
+        <div class="flex-1 overflow-auto">
+            <header class="p-6 bg-white shadow-md">
+                <h1 class="text-2xl font-bold text-gray-700">{% block pagetitle %} Dashboard {% endblock %}</h1>
+            </header>
+
+            {% block vcontent %}
+            <main class="p-6">
+                <!-- Dashboard Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Orders Card -->
+                    <div class="bg-white p-6 py-10 rounded-lg shadow-md">
+                        {% if shop %}
+                            <h2 class="text-2xl font-bold mb-4">Store: {{ shop.shopname }}</h2>
+                        {% else %}
+                            <h2 class="text-2xl font-bold mb-4">Store: No Active Store</h2>
+                        {% endif %}
+                        <p class="text-gray-600">Overview of recent orders.</p>
+                    </div>
+
+                    <!-- 30 Days Sales Card -->
+                    <div class="bg-white p-6 py-10 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold mb-4">30 Days Sales</h2>
+                        <p class="text-gray-600">Sales performance over the past 30 days.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 pt-6 rounded-lg shadow-md mt-6">
+                    <a href="{% url 'seller:orders' %}" class="text-2xl font-bold">Orders</a>
+                </div>
+                <div class="bg-white p-6 pt-6 rounded-lg shadow-md mt-6">
+                    <a href="" class="text-2xl font-bold">Store Health</a>
+                </div>
+            </main>
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- JavaScript to handle sidebar toggle -->
+    <script>
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+      });
+    </script>
+</body>
+</html>
+

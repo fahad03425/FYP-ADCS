@@ -1,0 +1,30 @@
+{% extends 'adminBase.html' %}
+
+{% block title %}
+Admin | New Sellers
+{% endblock %}
+
+{% block pagetitle %}
+New Sellers
+{% endblock %}
+
+{% block bcontent %}
+<div class="p-6">
+  <!-- Sellers List Container -->
+  <div class="flex flex-col">
+    {% for seller in sellers %}
+      <div class="flex justify-between items-center bg-white p-4 rounded-lg shadow-md mb-4">
+        <div class="text-lg font-semibold text-gray-800">{{ seller.shopname }}</div>
+        <div class="flex space-x-4">
+          <!-- detail Button with dynamic shop ID -->
+          <a href="{% url 'customAdmin:newsellerdetail' seller.shopID %}">
+            <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+              Check
+            </button>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

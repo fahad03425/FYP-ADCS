@@ -1,0 +1,35 @@
+# Python
+*.pyc
+*~
+__pycache__
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+
+# Media
+media/
+
+# Static files (usually collected staticfiles are not committed, but static/ maybe)
+#staticfiles/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

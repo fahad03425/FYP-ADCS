@@ -1,0 +1,91 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topbar Banner</title>
+    <style>
+      .search-bar {
+        z-index: 10; /* Ensure this is lower than the dropdown's z-index */
+      }
+      #dropdownMenu {
+        position: absolute;
+        top: 100%; /* Position below the toggle button */
+        right: 0;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 0.25rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 50; /* Ensure this is higher than overlapping components */
+      }
+      .relative-parent {
+        position: relative;
+      }
+    </style>
+    {% tailwind_css %}
+  </head>
+  <body>
+    <main class="main 3xl:mx-custom-margin">
+      <!-- Navbar -->
+      <div class="border-b container mx-auto flex flex-wrap items-center justify-between py-2 gap-y-2">
+        <!-- Left Section -->
+        <div class="flex sm:items-center px-4 gap-2 flex-grow  sm:justify-start text-center sm:text-left text-sm sm:text-base">
+          <span>
+            PhoneKart - Bridging Tech Fans and Top Retailers
+            <a class="text-bluish underline hover:text-blue-700 hover:underline" href="">
+              Know more
+            </a>
+          </span>
+        </div>
+        <!-- Right Section -->
+        <div class="flex items-center justify-end px-4 gap-3 sm:flex">
+          {% if user.is_authenticated %}
+          <div class="relative">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="toggleDropdown()">
+              <span class="flex text-sm sm:text-base">
+                Welcome, {{ user.first_name }}
+                <img src="{% static 'images/dropdown.png' %}" class="ml-2 mt-1 w-4 sm:w-5 h-3 sm:h-4">
+              </span>
+            </div>
+            <div id="dropdownMenu" class="absolute right-0 hidden bg-white border rounded shadow-md mt-2 z-50">
+              <a href="{% url 'marketplace:logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">
+                Logout
+              </a>
+            </div>
+          </div>
+          {% else %}
+          <div class="flex items-center gap-2 cursor-pointer">
+            <img
+              alt="user"
+              loading="lazy"
+              width="16"
+              height="16"
+              class="w-4 h-4 text-transparent"
+              src="{% static 'log-out.png' %}" />
+            <a href="{% url 'marketplace:signin' %}" class="inline sm:inline text-sm sm:text-base">Sign In</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+
+<script>
+  document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('dropdownMenu');
+    const toggleButton = dropdown.previousElementSibling;
+    if (!dropdown.contains(event.target) && !toggleButton.contains(event.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+
+  function toggleDropdown() {
+    const dropdown = document.getElementById('dropdownMenu');
+    dropdown.classList.toggle('hidden');
+  }
+</script>
+
+

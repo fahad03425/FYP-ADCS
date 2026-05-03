@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="flex ml-10 mt-8 w-11/12">
+    <!-- Filters Section -->
+    <form id="filtersForm" action="{% url 'marketplace:main_marketplace' %}" method="get" class="w-64">
+        {% include 'components/filters.html' %}
+    </form>
+
+    <!-- Product Grid Section -->
+    <div class="flex-grow ml-6">
+        <!-- Header Section -->
+        <div class="flex justify-between items-center border-b pb-10 mb-4">
+            <h1 class="text-2xl font-bold">Products</h1>
+            <div class="flex space-x-4 items-center">
+                <div>
+                    <label class="mr-2">Showing</label>
+                    <select class="border rounded p-2 px-5">
+                        <option>1-24</option>
+                        <option>25-48</option>
+                        <option>49-72</option>
+                        <option>73-96</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="mr-2">Sort by</label>
+                    <select class="border rounded p-2">
+                        <option value="price">Price</option>
+                        <option value="newest">Newest</option>
+                        <option value="best_selling">Best Selling</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div
+            id="resultsContainer"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10"
+        >
+              {% if products %}
+        {% for product in products %}
+            {% include 'components/mproduct_card.html' with product=product %}
+        {% endfor %}
+    {% else %}
+        <p class="text-center text-gray-500">No products found for your search.</p>
+    {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filtersForm = document.getElementById("filtersForm");
+        const priceRange = document.getElementById("priceRange");
+        const minPrice = document.getElementById("minPrice");
+        const clearFiltersBtn = document.getElementById("clearFilters");
+
+        // Update price range display in real-time
+        priceRange.addEventListener("input", function () {
+            minPrice.textContent = `(Rs${priceRange.value})`;
+        });
+
+        // Submit form on any filter change
+        filtersForm.addEventListener("change", function () {
+            this.submit();
+        });
+
+        // Clear filters and reset the form
+        clearFiltersBtn.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default button behavior
+            filtersForm.reset();
+            priceRange.value = "10000";
+            minPrice.textContent = `(Rs10000)`;
+            filtersForm.submit();
+        });
+    });
+</script>
+{% endblock %}

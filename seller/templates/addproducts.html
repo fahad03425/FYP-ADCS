@@ -1,0 +1,239 @@
+{% extends 'portalbase.html' %}
+
+{% block title %}
+Seller | Add Products
+{% endblock %}
+
+{% block pagetitle %}
+Add New Product
+{% endblock %}
+
+{% block vcontent %}
+
+
+<div class="pt-10 pb-10 pl-10 pr-10 bg-bluish">
+  {% if messages %}
+<div id="alerts" class="mt-5 fixed top-5 left-5 z-50 space-y-4">
+    {% for message in messages %}
+    <div class="alert 
+                {% if message.tags == 'error' %}bg-red-300 text-red-700{% endif %}
+                {% if message.tags == 'success' %}bg-green-300 text-green-700{% endif %}
+                p-4 rounded-lg shadow-md">
+        <span class="font-semibold">{{ message }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+  <form method="POST" enctype="multipart/form-data" class="space-y-6">
+    {% csrf_token %}
+    
+    <!-- Basic Information Section -->
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full  mx-auto">
+      <h2 class="text-2xl font-bold mb-6">Basic Information</h2>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Brand -->
+        <div>
+          <label for="brand" class="block text-sm font-medium text-gray-700">Brand</label>
+          <select id="brand" name="brand" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Select a Brand</option>
+            {% for brand in brands %}
+            <option value="{{ brand.id }}">{{ brand.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Model -->
+        <div>
+          <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
+          <select id="model" name="model" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Select a Model</option>
+          </select>
+        </div>
+
+        <!-- IMEI -->
+        <div>
+          <label for="imei" class="block text-sm font-medium text-gray-700">IMEI No.</label>
+          <input id="imei" name="imei" type="text" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        
+
+        <!-- Condition -->
+        <div>
+          <label for="condition" class="block text-sm font-medium text-gray-700">Condition</label>
+          <select id="condition" name="condition" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Select Condition</option>
+            <option value="new">New</option>
+            <option value="used">Used</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Images Section -->
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full mx-auto">
+      <h3 class="text-xl font-semibold mb-4">Product Images</h3>
+      <div class="grid grid-cols-12 ">
+        {% for i in "012"|make_list %}
+        <div class="w-24 h-24 bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center relative">
+          <input id="imageUpload{{ i }}" type="file" accept="image/*" class="hidden" name="images" onchange="handleImageUpload(event, {{ i }})">
+          <svg id="plusIcon{{ i }}" class="w-10 h-10 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onclick="triggerUpload({{ i }})">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Product Specifications -->
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Product Specifications</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+  <div>
+    <label for="custom_color" class="block text-sm font-medium text-gray-700">Select Color</label>
+    <select id="custom_color" name="custom_color" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+      <option value="">Select a color</option>
+      <option value="Black">Black</option>
+      <option value="White">White</option>
+      <option value="Blue">Blue</option>
+      <option value="Silver">Silver</option>
+    </select>
+  </div>
+  <div>
+    <label for="custom_color2" class="block text-sm font-medium text-gray-700">Color 2 (Optional)</label>
+    <select id="custom_color2" name="custom_color2" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+      <option value="">Select a color</option>
+      <option value="Black">Black</option>
+      <option value="White">White</option>
+      <option value="Blue">Blue</option>
+      <option value="Silver">Silver</option>
+    </select>
+  </div>
+</div>
+
+    </div>
+
+    <!-- Product Description -->
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full  mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Product Description</h2>
+      <textarea id="description" name="description" rows="4" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+    </div>
+
+    <!-- Price and Availability -->
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full  mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Price and Availability</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+          <input id="price" name="price" type="text" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <div>
+          <label for="stock" class="block text-sm font-medium text-gray-700">In Stock</label>
+          <input id="stock" name="stock" type="number" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <!-- SKU -->
+        <div>
+          <label for="seller_sku" class="block text-sm font-medium text-gray-700">Seller SKU</label>
+          <input id="seller_sku" name="seller_sku" type="text" class="w-full mt-2 border border-gray-300 rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+      </div>
+    </div>
+
+    <!-- Exchange Option -->
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full  mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Exchange</h2>
+      <div class="flex space-x-10">
+        <label class="inline-flex items-center">
+          <input type="radio" name="exchange" value="yes" class="form-radio text-indigo-600">
+          <span class="ml-2">Yes</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="radio" name="exchange" value="no" class="form-radio text-indigo-600" checked>
+          <span class="ml-2">No</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-bold shadow-lg hover:bg-indigo-700 transition duration-300">
+        Add Product
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+
+    setTimeout(() => {
+        const alerts = document.getElementById('alerts');
+        if (alerts) {
+            alerts.style.display = 'none';
+        }
+    }, 5000);
+
+// Function to retrieve models based on brands
+document.getElementById('brand').addEventListener('change', function () {
+    const brandId = this.value;  // Get selected brand ID
+    console.log('Brand changed:', brandId); // Log within the event listener
+    const modelDropdown = document.getElementById('model');  // Get the model dropdown
+
+    // Clear the model dropdown
+    modelDropdown.innerHTML = '<option value="">Select a Model</option>';
+
+    if (brandId) {
+        // Make an AJAX request to fetch models
+        fetch(`/seller/get-models/?brand_id=${brandId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Populate the dropdown with models
+                data.models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.id;
+                    option.textContent = model.name;
+                    modelDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching models:', error));
+    }
+});
+
+// Handle image upload
+function handleImageUpload(event, slotIndex) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const imgSlot = document.getElementById(`imageUpload${slotIndex}`).parentElement;
+        const plusIcon = document.getElementById(`plusIcon${slotIndex}`);
+
+        // Replace plus icon with uploaded image
+        plusIcon.style.display = 'none';
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.classList.add('w-full', 'h-full', 'rounded-md', 'object-cover');
+        imgSlot.appendChild(img);
+
+        // Disable the input field for this slot
+        document.getElementById(`imageUpload${slotIndex}`).style.display = 'none';
+    };
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}
+
+// Trigger file input click
+function triggerUpload(slotIndex) {
+    const input = document.getElementById(`imageUpload${slotIndex}`);
+    if (!input.disabled) {
+        input.click();
+    }
+}
+
+
+
+</script>
+
+{% endblock %}

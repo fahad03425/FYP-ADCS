@@ -1,0 +1,58 @@
+{% load static %}
+<div class="lg:flex lg:flex-col lg:w-64 bg-white shadow-lg h-full relative">
+    <!-- Logo -->
+    <div class="flex items-center justify-center py-6">
+       <a href="{% url 'customAdmin:dashboard' %}">
+        <img class="h-14" src="{% static 'logo.jpg' %}" alt="Logo">
+        </a>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="mt-10 space-y-2 flex-grow">
+
+        <a href="{% url 'customAdmin:dashboard' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Dashboard
+        </a>
+
+        <!-- Registered Sellers -->
+        <a href="{% url 'customAdmin:registeredSellers' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Registered Sellers
+        </a>
+
+        <!-- New Sellers -->
+        <a href="{% url 'customAdmin:newsellers' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            New Sellers
+        </a>
+        
+        <!-- New Sellers -->
+        <a href="{% url 'customAdmin:category' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+           Categories
+        </a>
+
+         <!-- New Sellers -->
+        <a href="{% url 'customAdmin:brand' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+           Brands
+        </a>
+
+         <!-- New Sellers -->
+        <a href="{% url 'customAdmin:model' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+           Models
+        </a>
+
+         <!-- New Sellers -->
+        <a href="{% url 'customAdmin:specification' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            specification
+        </a>
+
+       
+         
+        
+    </nav>
+
+    <!-- Account Settings - anchored to the bottom -->
+    <div class="absolute bottom-0 w-full">
+        <a href="{% url 'customAdmin:adminsettings' %}" class="block py-3 px-4 text-lg font-semibold rounded transition duration-200 bg-white hover:bg-bluish hover:text-white">
+            Account Settings
+        </a>
+    </div>
+</div>

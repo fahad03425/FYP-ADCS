@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block mtitle %}
+About Us
+{% endblock %}
+
+{% block content %}
+<div class="bg-gray-200 py-16 mt-10 mb-10 rounded-lg">
+    <div class="container mx-auto px-6 lg:px-20">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold text-bluish mb-6">About Us</h1>
+            <p class="text-2xl text-gray-700">
+                Welcome to <span class="font-semibold">Phone Marketplace</span> — the ultimate destination for buying and selling mobile phones exclusively from physical phone stores. We aim to bridge the gap between trusted sellers and buyers, offering a seamless platform for a hassle-free experience.
+            </p>
+        </div>
+
+        <div class="mt-24 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <!-- About Section -->
+            <div>
+                <h2 class="text-3xl font-bold text-bluish mb-4">Who We Are</h2>
+                <p class="text-gray-700 leading-relaxed text-2xl">
+                    At <span class="font-semibold">Phone Marketplace</span>, we believe in empowering local phone stores by giving them a digital presence while ensuring buyers access authentic, high-quality products. Unlike traditional e-commerce platforms, our marketplace is exclusively designed for **physical phone stores**, enabling them to showcase their products online and reach a larger audience.
+                </p>
+                <p class="text-gray-700 leading-relaxed mt-4 text-2xl">
+                    Whether you're searching for the latest smartphones or great deals on pre-owned devices, our platform is your trusted partner. With features like **city-based searches**, **condition-based filters**, and **real-time suggestions**, we make finding the perfect phone quick and simple.
+                </p>
+            </div>
+            <!-- About Image -->
+            <div class="flex justify-center">
+                <img src="{% static 'about-us.png' %}" alt="About Us" class="w-full max-w-md rounded-lg shadow-md" />
+            </div>
+        </div>
+
+        <div class="mt-24 grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-10">
+            <!-- Mission Section -->
+            <div>
+                <img src="{% static 'mission.png' %}" alt="Our Mission" class="w-full max-w-md rounded-lg shadow-md" />
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold text-bluish mb-4">Our Mission</h2>
+                <p class="text-gray-700 leading-relaxed text-2xl">
+                    Our mission is to revolutionize the way people buy and sell phones by creating a trusted ecosystem. We aim to support local businesses while offering buyers a platform where they can find verified sellers, transparent pricing, and unparalleled convenience. 
+                </p>
+                <p class="text-gray-700 leading-relaxed mt-4 text-2xl">
+                    From providing buyers with a wide range of phones to ensuring sellers have the tools they need to succeed, <span class="font-semibold">Phone Marketplace</span> is committed to building a marketplace that works for everyone.
+                </p>
+            </div>
+        </div>
+
+        <!-- Team Section -->
+        <div class="mt-24">
+            <h2 class="text-3xl font-bold text-center text-bluish mb-10">Meet Our Team</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <!-- Founder -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <img src="{% static 'founder.png' %}" alt="Fahad" class="w-32 h-32 mx-auto rounded-full shadow-md mb-4" />
+                    <h3 class="text-xl font-bold text-gray-800">Fahad</h3>
+                    <p class="text-gray-600">Founder</p>
+                    <p class="text-gray-700 mt-3">
+                        With a vision to empower local businesses and transform the marketplace, Fahad leads the platform with dedication and passion.
+                    </p>
+                </div>
+                <!-- Co-founder Juanid -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <img src="{% static 'juanid.png' %}" alt="Juanid" class="w-32 h-32 mx-auto rounded-full shadow-md mb-4" />
+                    <h3 class="text-xl font-bold text-gray-800">Juanid</h3>
+                    <p class="text-gray-600">Co-founder</p>
+                    <p class="text-gray-700 mt-3">
+                        Junaid doesn't anything. He's a lazy team member who likes to party and drink beer.
+                    </p>
+                </div>
+                <!-- Co-founder Soban -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <img src="{% static 'soban.png' %}" alt="Soban" class="w-32 h-32 mx-auto rounded-full shadow-md mb-4" />
+                    <h3 class="text-xl font-bold text-gray-800">Soban</h3>
+                    <p class="text-gray-600">Co-founder</p>
+                    <p class="text-gray-700 mt-3">
+                        Soban focuses on user experience and operational excellence, ensuring both buyers and sellers have a smooth journey on the platform.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Values Section -->
+        <div class="mt-24">
+            <h2 class="text-3xl font-bold text-center text-bluish mb-6">Our Core Values</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800">Trust & Transparency</h3>
+                    <p class="text-gray-700 mt-3">
+                        We prioritize authenticity and fairness to ensure a secure buying and selling experience.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800">Empowering Local Stores</h3>
+                    <p class="text-gray-700 mt-3">
+                        Our platform is dedicated to supporting local businesses and helping them thrive online.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800">Customer First</h3>
+                    <p class="text-gray-700 mt-3">
+                        We aim to create a user-friendly experience that prioritizes the needs of both buyers and sellers.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

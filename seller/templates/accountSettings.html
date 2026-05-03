@@ -1,0 +1,21 @@
+{% extends 'portalbase.html' %}
+
+{% block title %}
+Seller| Settings
+{% endblock %}
+
+{% block pagetitle %}
+Settings
+{% endblock %}
+
+{% block vcontent %}
+<div class="container">
+      <main class="p-6">
+        <div class="pl-10 pt-10 h-screen w-full rounded-md bg-white">
+            <h1 class="mb-3">Do you want to logout?</h1>
+
+            <a class="bg-blue-500  text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600" href="{% url 'seller:logout' %}">Logout</a>
+        </div>
+        </main>
+
+{% endblock %}

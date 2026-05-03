@@ -1,0 +1,118 @@
+<div class="w-64 p-4 border rounded-lg h-100 bg-white shadow mb-4">
+    <button 
+        id="clearFilters" 
+        class="w-full mb-4 p-2 text-sm text-white bg-bluish hover:bg-violet-600 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="reset"
+    >
+        Clear All Filters
+    </button>
+
+    <div class="relative mb-4">
+        <h3 class="font-bold mb-2 text-gray-700">Condition</h3>
+        <select 
+            name="condition"
+            id="conditionSelect" 
+            class="block w-full bg-white border py-2 pl-4 pr-8 border-gray-300 rounded-lg shadow-lg"
+        >
+            <option value="" {% if not request.GET.condition %}selected{% endif %}>Select Condition</option>
+            <option value="new" {% if request.GET.condition == 'new' %}selected{% endif %}>New</option>
+            <option value="used" {% if request.GET.condition == 'used' %}selected{% endif %}>Used</option>
+        </select>
+    </div>
+
+    <div class="relative mb-4">
+        <h3 class="font-bold mb-2 text-gray-700">City</h3>
+        <select 
+            name="city"
+            id="citySelect" 
+            class="block w-full bg-white border py-2 pl-4 pr-8 border-gray-300 rounded-lg shadow-lg"
+        >
+            <option value="" {% if not request.GET.city %}selected{% endif %}>Select City</option>
+            <option value="Islamabad" {% if request.GET.city == 'Islamabad' %}selected{% endif %}>Islamabad</option>
+            <option value="Rawalpindi" {% if request.GET.city == 'Rawalpindi' %}selected{% endif %}>Rawalpindi</option>
+            <option value="Lahore" {% if request.GET.city == 'Lahore' %}selected{% endif %}>Lahore</option>
+            <option value="Karachi" {% if request.GET.city == 'Karachi' %}selected{% endif %}>Karachi</option>
+        </select>
+    </div>
+
+    <div class="relative mb-4">
+        <h3 class="font-bold mb-2 text-gray-700">Color</h3>
+        <select 
+            name="color"
+            id="colorSelect" 
+            class="block w-full bg-white border py-2 pl-4 pr-8 border-gray-300 rounded-lg shadow-lg"
+        >
+            <option value="" {% if not request.GET.color %}selected{% endif %}>Select Color</option>
+            <option value="Black" {% if request.GET.color == 'Black' %}selected{% endif %}>Black</option>
+             <option value="White" {% if request.GET.color == 'White' %}selected{% endif %}>White</option>
+            <option value="Blue" {% if request.GET.color == 'Blue' %}selected{% endif %}>Blue</option>
+            <option value="Silver" {% if request.GET.color == 'Silver' %}selected{% endif %}>Silver</option>
+        </select>
+    </div>
+
+    <div class="relative mb-4">
+        <h3 class="font-bold mb-2 text-gray-700">Exchange</h3>
+        <select 
+            name="exchange"
+            id="exchangeSelect" 
+            class="block w-full bg-white border py-2 pl-4 pr-8 border-gray-300 rounded-lg shadow-lg"
+        >
+            <option value="" {% if not request.GET.exchange %}selected{% endif %}>Select Exchange</option>
+            <option value="true" {% if request.GET.exchange == 'true' %}selected{% endif %}>Yes</option>
+            <option value="false" {% if request.GET.exchange == 'false' %}selected{% endif %}>No</option>
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <h3 class="font-bold mb-2 text-gray-700">Price Range</h3>
+        <input
+            name="price_min"
+            id="priceRange"
+            type="range"
+            min="10000"
+            max="150000"
+            value="{{ request.GET.price_min|default:'10000' }}"
+            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+        <div class="flex justify-between text-sm text-gray-500 mt-2">
+            <span id="minPrice">(Rs{{ request.GET.price_min|default:'10000' }})</span>
+            <span id="maxPrice">(Rs150000)</span>
+        </div>
+    </div>
+</div>
+
+<script>
+ document.addEventListener('DOMContentLoaded', () => {
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const conditionSelect = document.getElementById('conditionSelect');
+    const citySelect = document.getElementById('citySelect');
+    const colorSelect = document.getElementById('colorSelect');
+    const exchangeSelect = document.getElementById('exchangeSelect');
+    const priceRange = document.getElementById('priceRange');
+    const minPrice = document.getElementById('minPrice');
+     const filtersForm = document.getElementById("filtersForm");
+
+    // Update price range display in real-time
+    priceRange.addEventListener('input', () => {
+        minPrice.textContent = `(Rs${priceRange.value})`;
+    });
+
+    // Clear filters and reset all fields to their default state
+
+    clearFiltersBtn.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default behavior
+
+        // Reset form fields to their initial state
+        filtersForm.reset();
+
+        // Clear query parameters from URL and reload
+        const url = new URL(window.location.href);
+        url.search = ''; // Clear all query parameters
+        window.location.href = url.toString(); // Reload the page
+    });
+});
+
+
+
+</script>
+

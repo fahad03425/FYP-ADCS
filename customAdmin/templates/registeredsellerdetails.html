@@ -1,0 +1,65 @@
+{% extends 'adminBase.html' %}
+
+{% block title %}
+Admin | Registered Seller Detail
+{% endblock %}
+
+{% block pagetitle %}
+Registered Seller Detail
+{% endblock %}
+
+{% block bcontent %}
+<div class="p-10 bg-gray-100 h-full">
+  <!-- Seller Detail Container -->
+  <div class="max-w-3xl mx-auto bg-gray-200 rounded-lg shadow-md p-8">
+    <!-- Seller Information -->
+    <div class="grid grid-cols-2 gap-4 text-lg mb-6">
+      <div>
+        <p class="text-2xl"><span class="font-bold text-2xl">User ID:</span> {{ user.userid }}</p>
+      </div>
+      <div>
+        <p class="text-2xl"><span class="font-bold text-2xl">Seller ID:</span> {{ seller.shopID }}</p>
+      </div>
+      
+      <div>
+        <p><span class="font-bold">First Name:</span> {{ user.first_name }}</p>
+      </div>
+      <div>
+        <p><span class="font-bold">Last Name:</span> {{ user.last_name }}</p>
+      </div>
+
+      <div>
+        <p><span class="font-bold">Phone Number:</span> {{ user.phone }}</p>
+      </div>
+      <div>
+        <p><span class="font-bold">Shop Name:</span> {{ seller.shopname }}</p>
+      </div>
+
+      <div>
+        <p><span class="font-bold">Email:</span> {{ user.email }}</p>
+      </div>
+      <div>
+        <p><span class="font-bold">City:</span> {{ seller.city }}</p>
+      </div>
+
+      <div class="col-span-2">
+        <p><span class="font-bold">Area:</span> {{ seller.area }}</p>
+      </div>
+
+      <div class="col-span-2">
+        <p><span class="font-bold">CNIC:</span> {{ user.cnic }}</p>
+      </div>
+    </div>
+
+    <!-- Approve Button -->
+    <div class="flex justify-center">
+    <a href="{% url 'customAdmin:registeredSellers' %}">
+      <button class="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300">
+        Close
+      </button>
+    </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

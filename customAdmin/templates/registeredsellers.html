@@ -1,0 +1,44 @@
+{% extends 'adminBase.html' %}
+
+{% block title %}
+Admin | Registered Sellers
+{% endblock %}
+
+{% block pagetitle %}
+Registered Sellers
+{% endblock %}
+
+{% block bcontent %}
+<div class="p-6">
+  <div class="flex flex-col">
+    {% for seller in sellers %}
+      <div class="flex justify-between items-center bg-white p-4 rounded-lg shadow-md mb-4">
+        <div class="text-lg font-semibold text-gray-800">{{ seller.shopname }}</div>
+
+        <div class="flex space-x-4">
+          <a href="{% url 'customAdmin:registeredsellerdetail' seller.shopID %}">
+            <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+              Detail
+            </button>
+          </a>
+
+          <!-- Delete Button Form -->
+          <form action="" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="shop_id" value="{{ seller.shopID }}">
+            <button type="submit" class="bg-red-700-important text-white font-bold py-2 px-4 rounded hover:bg-red-600-important focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50">
+              Delete
+            </button>
+          </form>
+
+          <!-- Verify Button -->
+          <button class="bg-green-500-important text-white font-bold py-2 px-4 rounded hover:bg-green-600-important focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
+            Verify
+          </button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+

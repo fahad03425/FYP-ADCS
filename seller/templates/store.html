@@ -1,0 +1,118 @@
+{% extends 'portalbase.html' %}
+
+{% block title %}
+Seller | Store Management
+{% endblock %}
+
+{% block pagetitle %}
+Store Management
+{% endblock %}
+
+{% load static %}
+
+{% block vcontent %}
+<div class="pl-10 pt-10 pr-10 h-screen w-full bg-bluish">
+    <div class="p-8 bg-white rounded-lg shadow-lg w-full mx-auto">
+        <!-- Form to Save Data -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="flex items-center mb-6">
+    <div class="relative w-28 h-28">
+    <!-- Profile Image Circle -->
+    <img id="profileImage" 
+         src="{% if shop_detail.image %}{{ shop_detail.image.url }}{% else %}{% static 'images/mobimg1.jpeg' %}{% endif %}" 
+         alt="Store Logo" 
+         class="object-cover rounded-full border border-gray-300 shadow"
+         style="width: 112px; height: 112px;">
+</div>
+
+    <!-- Upload Button -->
+    <div class="ml-6">
+        <div class="mb-2 mt-2 flex justify-center">
+            <label for="shop_image" class="cursor-pointer text-white text-sm py-2 px-3 bg-blue-500 rounded-md hover:bg-blue-600">
+                Upload
+            </label>
+            <input type="file" id="shop_image" name="shop_image" class="hidden">
+        </div>
+        <h2 class="text-2xl font-semibold">{{ shop.shopname }}</h2> <!-- Dynamic Store Name -->
+    </div>
+</div>
+
+            <!-- Store ID Section -->
+            <div class="mb-6 mt-5">
+                <label for="storeId" class="block text-gray-700 font-semibold text-xl">Store ID</label>
+                <input 
+                    type="text" 
+                    id="storeId" 
+                    class="mt-2 p-2 border border-gray-300 rounded-md w-1/5" 
+                    value="{{ shop.shopID }}" 
+                    readonly>
+            </div>
+
+            <!-- Additional Features Section -->
+            <div class="mt-8">
+                <!-- Opening Time -->
+                <div class="mb-6">
+                    <label for="shop_open" class="block text-gray-700 font-semibold text-xl">Opening Time</label>
+                    <input 
+                        type="time" 
+                        id="shop_open" 
+                        name="shop_open" 
+                        class="mt-2 p-2 border border-gray-300 rounded-md w-1/5" 
+                        value="{{ shop_detail.shop_open|time:'H:i' }}">
+                </div>
+
+                <!-- Closing Time -->
+                <div class="mb-6">
+                    <label for="shop_close" class="block text-gray-700 font-semibold text-xl">Closing Time</label>
+                    <input 
+                        type="time" 
+                        id="shop_close" 
+                        name="shop_close" 
+                        class="mt-2 p-2 border border-gray-300 rounded-md w-1/5" 
+                        value="{{ shop_detail.shop_close|time:'H:i' }}">
+                </div>
+
+                <!-- Holiday Mode -->
+                <div class="flex-col gap-10 mb-6">
+                    <div class="flex items-center">
+                        <label for="holiday_mode" class="block text-gray-700 text-xl font-semibold mr-3">Holiday Mode</label>
+                        <input 
+                            type="checkbox" 
+                            id="holiday_mode" 
+                            name="holiday_mode" 
+                            {% if shop_detail.holiday_mode %}checked{% endif %}>
+                    </div>
+                </div>
+
+                <!-- Store Policies -->
+                <div class="w-1/2">
+                    <label for="policy" class="text-lg font-semibold mb-1 mt-5">Store Policies</label>
+                    <textarea 
+                        id="policy" 
+                        name="policy" 
+                        class="mt-2 p-2 border border-gray-300 rounded-md w-full h-24" 
+                        placeholder="Enter store policies (return, shipping, etc.)">{{ shop_detail.policy }}</textarea>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="mt-6 text-right">
+                <button type="submit" class="bg-bluish text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Script to handle image upload preview
+    document.getElementById('shop_image').addEventListener('change', function(event) {
+        const [file] = event.target.files;
+        if (file) {
+            document.getElementById('profileImage').src = URL.createObjectURL(file);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,298 @@
+{% load static %}
+{% load custom_filters %}
+
+<div class="flex flex-col lg:flex-row bg-white rounded-lg overflow-hidden w-full max-w-6xl mx-auto mb-6 py-8">
+    <div class="lg:w-1/2 p-6 flex justify-center">
+        <img src="{{ product_images.0.image.url }}" alt="Main product image" class="w-full h-auto max-w-md rounded-lg border">
+    </div>
+    <div class="lg:w-1/2 p-6 flex flex-col justify-between">
+        <h2 class="text-5xl font-bold text-gray-800 mb-2">{{ product.model }}</h2>
+        <a href="{% url 'marketplace:store' product.fk_ShopID.id %}" class="text-blue-600 underline text-lg font-medium mb-4">Visit store</a>
+        <p class="text-3xl font-bold text-gray-700 mb-6 price">Rs. {{ product.price|floatformat:0 }}</p>
+        <div class="text-lg text-gray-700 mb-6 space-y-2">
+            <p><strong>Brand:</strong> {{ product.brand1 }}</p>
+            <p><strong>Condition:</strong> {{ product.condition }}</p>
+            <p><strong>Color:</strong> {{ product.colors }}</p>
+            <p><strong>In Stock:</strong> <span class="text-green-500">{{ product.stock }}</span></p>
+            <p><strong class="mr-1">Qty:</strong>
+             {% if product.stock > 0 %}
+               <select name="quantity" id="quantity" class="mt-2">
+             {% for i in product.stock|range_filter %}
+                <option value="{{ i }}">{{ i }}</option>
+             {% endfor %}
+                </select>
+              {% else %}
+                <span class="text-red-500">Out of stock</span>
+             {% endif %}
+            </p>
+        </div>
+       <div class="flex gap-4">
+    
+    {% if latest_booking and latest_booking.status == 'Confirmed' and latest_booking.sold %}
+        <!-- Show Book Now if order is sold and status is Confirmed -->
+        <button id="openBookingModal" class="book-now-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition">
+            Book Now
+        </button>
+    {% elif latest_booking and latest_booking.status != 'Cancelled' %}
+        {% if latest_booking.status == 'Pending' %}
+            <button disabled class="bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+                Pending Confirmation
+            </button>
+        {% elif latest_booking.status == 'Confirmed' %}
+            <button disabled class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+                Booking Confirmed
+            </button>
+        {% endif %}
+    {% elif product.stock == 0 %}
+        <button disabled class="bg-gray-400 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+            Out of Stock
+        </button>
+    {% else %}
+        <button id="openBookingModal" class="book-now-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition">
+            Book Now
+        </button>
+    {% endif %}
+
+    {% if latest_booking and latest_booking.status == 'Pending' or latest_booking.status == 'Confirmed' and not latest_booking.sold %}
+        <button id="openSellerInfoModal" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg shadow-lg transition">
+            Seller Information
+        </button>
+    {% endif %}
+</div>
+    </div>
+</div>
+
+<!-- Booking Form Modal -->
+<div id="bookingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50 backdrop-blur-sm">
+    <div class="bg-gray-200 p-6 md:p-8 rounded-lg shadow-lg w-11/12 sm:w-2/3 md:w-1/2 lg:w-1/3">
+        <h2 class="text-xl font-bold mb-4">Confirm Details for Booking</h2>
+        <form id="bookingForm" method="post">
+            {% csrf_token %}
+            <!-- Add data-product-id to the form -->
+            <input type="hidden" name="product_id" id="product_id" value="{{ product.productID }}">
+            <input type="hidden" name="quantity" id="hiddenQuantityInput" value="1">
+            
+            <div class="mb-4">
+                <label for="phone" class="block mb-1 text-lg">Phone Number</label>
+                <input type="text" 
+                       name="phone" 
+                       value="{{ request.user.phone }}" 
+                       id="phone" 
+                       class="w-full border border-gray-300 p-2 rounded" 
+                       required 
+                       pattern="[0-9]{10,15}"
+                       title="Please enter a valid phone number (10-15 digits)">
+            </div>
+            
+            <div class="flex justify-center">
+                <button type="submit" class="bg-blue-500 text-white font-bold text-lg py-2 px-4 rounded hover:bg-blue-600">
+                    Confirm Booking
+                </button>
+            </div>
+        </form>
+        <button id="closeBookingModal" class="mt-4 text-red-500 hover:underline">Cancel</button>
+    </div>
+</div>
+
+<!-- Thank You Message Modal -->
+<div id="thankYouModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50 backdrop-blur-sm">
+    <div class="bg-white border-2 p-6 md:p-8 rounded shadow-md w-11/12 sm:w-2/3 md:w-1/2 lg:w-1/3 text-center">
+        <h2 class="text-2xl font-bold mb-4">Thank you for booking!</h2>
+        <div class="flex justify-center mb-6">
+            <img src="{% static 'images/check (2).png' %}" alt="check mark" class="w-40 h-40 mr-2">
+        </div>
+        <p class="font-medium text-lg">Seller will contact you within 2 hours</p>
+        <button class="bg-blue-500 text-white py-2 px-4 rounded mt-4 hover:bg-blue-600" id="closeThankYouModal">
+            Close
+        </button>
+    </div>
+</div>
+
+<!-- Seller Information Modal -->
+<div id="sellerInfoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50 backdrop-blur-sm">
+    <div class="bg-gray-200 p-6 md:p-8 rounded-lg shadow-lg w-11/12 sm:w-2/3 md:w-1/2 lg:w-1/3">
+        <h2 class="text-2xl font-bold mb-6 text-center">Seller Information</h2>
+        <div class="space-y-4">
+            <div class="border-b pb-3">
+                <p class="text-gray-600 font-medium">Shop Name</p>
+                <p class="text-lg">{{ product.fk_ShopID.shopname }}</p>
+            </div>
+            <div class="border-b pb-3">
+                <p class="text-gray-600 font-medium">Phone Number</p>
+                <p class="text-lg">{{ product.fk_ShopID.user.phone }}</p>
+            </div>
+            <div class="border-b pb-3">
+                <p class="text-gray-600 font-medium">Address</p>
+                <p class="text-lg">{{ product.fk_ShopID.area }}, {{ product.fk_ShopID.city }}</p>
+            </div>
+            <div>
+                <p class="text-gray-600 font-medium">Location</p>
+                <p class="text-lg">{{ product.fk_ShopID.location }}</p>
+            </div>
+        </div>
+        <div class="mt-8 text-center">
+            <button id="closeSellerInfoModal" class="bg-bluish hover:bg-gray-300 text-white border-2 font-bold py-2 px-6 rounded-lg">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // Append modals to body to avoid CSS containing block issues
+    document.body.appendChild(document.getElementById("bookingModal"));
+    document.body.appendChild(document.getElementById("thankYouModal"));
+    document.body.appendChild(document.getElementById("sellerInfoModal"));
+
+    const bookingForm = document.getElementById("bookingForm");
+    const openBookingModal = document.querySelector("#openBookingModal");
+    const closeBookingModal = document.getElementById("closeBookingModal");
+    const closeThankYouModal = document.getElementById("closeThankYouModal");
+    const bookingModal = document.getElementById("bookingModal");
+    const thankYouModal = document.getElementById("thankYouModal");
+    const quantityDropdown = document.getElementById("quantity");
+    const hiddenQuantityInput = document.getElementById("hiddenQuantityInput");
+    const productIdInput = document.getElementById("product_id");
+
+     const priceElements = document.querySelectorAll('.price');
+    priceElements.forEach(function(priceElement) {
+      let price = priceElement.innerText.replace('Rs. ', '');
+      price = parseFloat(price.replace(',', '')); // Remove any existing commas
+      priceElement.innerText = 'Rs. ' + price.toLocaleString('en-PK');
+    });
+    
+    // Function to update booking status button
+   const updateBookingStatus = (status) => {
+        const bookingButton = document.getElementById("openBookingModal");
+        const sellerInfoButton = document.getElementById("openSellerInfoModal");
+        
+        if (status === 'Pending') {
+            bookingButton.disabled = true;
+            bookingButton.className = "bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg";
+            bookingButton.textContent = "Pending Confirmation";
+            sellerInfoButton.classList.remove("hidden");
+        } else if (status === 'Confirmed') {
+            bookingButton.disabled = true;
+            bookingButton.className = "bg-green-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg";
+            bookingButton.textContent = "Booking Confirmed";
+            sellerInfoButton.classList.remove("hidden");
+        }
+    };
+
+    // New elements for seller info
+    const openSellerInfoModal = document.getElementById("openSellerInfoModal");
+    const closeSellerInfoModal = document.getElementById("closeSellerInfoModal");
+    const sellerInfoModal = document.getElementById("sellerInfoModal");
+
+    // Check if the booking was previously completed
+    const hasBookingCompleted = localStorage.getItem(`booking_completed_${productIdInput.value}`);
+    if (hasBookingCompleted === 'true') {
+        openSellerInfoModal?.classList.remove("hidden");
+    }
+
+    // Function to handle modal display
+    const toggleModal = (modal, show) => {
+        if (show) {
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        } else {
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+    };
+
+    // Open/close seller info modal
+    openSellerInfoModal?.addEventListener("click", () => {
+        toggleModal(sellerInfoModal, true);
+    });
+
+    closeSellerInfoModal?.addEventListener("click", () => {
+        toggleModal(sellerInfoModal, false);
+    });
+
+    // Existing modal handlers...
+    openBookingModal?.addEventListener("click", () => {
+        hiddenQuantityInput.value = quantityDropdown.value;
+        toggleModal(bookingModal, true);
+    });
+
+    closeBookingModal.addEventListener("click", () => {
+        toggleModal(bookingModal, false);
+    });
+
+    closeThankYouModal?.addEventListener("click", () => {
+    toggleModal(thankYouModal, false);
+    window.location.reload(); // Reload the current window
+});
+
+    // Handle form submission with status update
+    bookingForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        
+        const productId = productIdInput.value;
+        if (!productId) {
+            alert("Error: Product ID is missing");
+            return;
+        }
+
+        const formData = new FormData(bookingForm);
+        
+        
+            const response = await fetch("{% url 'seller:create_booking' %}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "An error occurred while processing your request");
+            }
+
+            if (data.success) {
+                toggleModal(bookingModal, false);
+                toggleModal(thankYouModal, true);
+                updateBookingStatus('Pending');
+                
+                // Update quantity display if needed
+                if (quantityDropdown) {
+                    const selectedQty = parseInt(quantityDropdown.value);
+                    const currentStock = parseInt("{{ product.stock }}") - selectedQty;
+                    
+                    if (currentStock === 0) {
+                        const qtyContainer = quantityDropdown.parentElement;
+                        qtyContainer.innerHTML = '<span class="text-red-500">Out of stock</span>';
+                        bookingButton.disabled = true;
+                        bookingButton.className = "bg-gray-400 text-white font-bold py-3 px-6 rounded-lg shadow-lg";
+                        bookingButton.textContent = "Out of Stock";
+                    }
+                }
+            } else {
+                throw new Error(data.error || "Failed to create booking");
+            }
+       
+    });
+    
+    // Close modals when clicking outside
+    window.addEventListener("click", (event) => {
+        if (event.target === bookingModal) {
+            toggleModal(bookingModal, false);
+        }
+        if (event.target === thankYouModal) {
+            toggleModal(thankYouModal, false);
+        }
+        if (event.target === sellerInfoModal) {
+            toggleModal(sellerInfoModal, false);
+        }
+    });
+
+   
+});
+</script>
+
+
+

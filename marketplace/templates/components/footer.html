@@ -1,0 +1,87 @@
+{% load static %}
+<footer class="bg-white p-8 border-t-2">
+  <div class="text-center justify-center mb-8 flex flex-row">
+    <p class="text-xl italic mt-1 font-medium mr-6">
+      To start selling on our platform
+      <a href="#" class="text-bluish">Click here</a>
+    </p>
+    
+     {% if user.is_authenticated %}
+    <a href="{% url 'seller:registration' %}">
+      <button
+       class="ml-4 px-6 py-2 border-2 border-bluish text-bluish font-bold rounded-full hover:bg-bluish hover:text-white transition"
+      >
+       Become a Seller
+      </button>
+    </a>
+    {% else %}
+    <a href="{% url 'marketplace:signup' %}">
+      <button
+       class="ml-4 px-6 py-2 border-2 border-bluish text-bluish font-bold rounded-full hover:bg-bluish hover:text-white transition"
+      >
+       Become a Seller
+      </button>
+    </a>
+
+    {% endif %}
+  </div>
+
+  <div class="3xl:mx-custom-margin">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+      <!-- Contact Us -->
+      <div>
+        <h3 class="font-bold text-xl mb-4">Contact Us</h3>
+        <p class="text-gray-600">+92 3455222930</p>
+        <p class="text-gray-600">rajafahad03425@gmail.com</p>
+      </div>
+
+      <!-- Pages -->
+      <div>
+        <h3 class="font-bold text-xl mb-4">Phone Kart</h3>
+        <ul>
+          <li class="text-gray-600 mb-2">
+            <a href="{% url 'marketplace:aboutus' %}" class="hover:underline hover:text-bluish">About us</a>
+          </li>
+          <li class="text-gray-600 mb-2">
+            <a href="#stores" class="hover:underline  hover:text-bluish">Stores</a>
+          </li>
+          <li class="text-gray-600 mb-2">
+            <a href="{% url 'marketplace:privacypolicy' %}" class="hover:underline  hover:text-bluish">Privacy Policy</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Phone Kart Info -->
+      <div class="flex flex-col items-center md:items-start">
+        <div class="flex mb-4">
+          <img
+            src="{% static 'logo.jpg' %}"
+            alt="Phone Kart Logo"
+            class="w-36 h-10 mr-2"
+          />
+        </div>
+        <p class="text-gray-600 mb-4 text-center md:text-left">
+          Our goal is to create a user-friendly marketplace that connects buyers
+          and sellers of mobile phones, ensuring a seamless and secure
+          transaction process with a wide range of options and competitive
+          prices.
+        </p>
+        <div class="flex space-x-4">
+          <a href="#twitter" class="text-gray-600 hover:text-blue-500">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#facebook" class="text-gray-600 hover:text-blue-500">
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a href="#linkedin" class="text-gray-600 hover:text-blue-500">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 text-center text-gray-600">
+    &copy; 2024 PhoneKart. All Rights Reserved.
+  </div>
+</footer>

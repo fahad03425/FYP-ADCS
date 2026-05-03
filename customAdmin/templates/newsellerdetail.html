@@ -1,0 +1,71 @@
+{% extends 'adminBase.html' %}
+
+{% block title %}
+Admin | New Seller Detail
+{% endblock %}
+
+{% block pagetitle %}
+New Seller Detail
+{% endblock %}
+
+{% block bcontent %}
+<div class="p-10 bg-gray-100 h-full">
+  <!-- Seller Detail Container -->
+  <div class="max-w-3xl mx-auto bg-gray-200 rounded-lg shadow-md p-8">
+    <!-- Seller Information -->
+    <div class="grid grid-cols-2 gap-4 text-xl mb-6">
+      <div>
+        <p class="text-2xl"><span class="font-bold text-2xl">User ID:</span> {{ user.userid }}</p>
+      </div>
+      <div>
+        <p class="text-2xl"><span class="font-bold text-2xl">Seller ID:</span> {{ seller.shopID }}</p>
+      </div>
+      
+      <div>
+        <p><span class="font-bold">First Name:</span> {{ user.first_name }}</p>
+      </div>
+      <div>
+        <p><span class="font-bold">Last Name:</span> {{ user.last_name }}</p>
+      </div>
+
+      <div>
+        <p><span class="font-bold">Phone Number:</span> {{ user.phone }}</p>
+      </div>
+      <div>
+        <p><span class="font-bold">Shop Name:</span> {{ seller.shopname }}</p>
+      </div>
+
+      <div>
+        <p><span class="font-bold">Email:</span> {{ user.email }}</p>
+      </div>
+      <div>
+        <p><span class="font-bold">City:</span> {{ seller.city }}</p>
+      </div>
+
+      <div class="col-span-2">
+        <p><span class="font-bold">Area:</span> {{ seller.area }}</p>
+      </div>
+
+      <div class="col-span-2">
+        <p><span class="font-bold">CNIC:</span> {{ user.cnic }}</p>
+      </div>
+    </div>
+
+    <!-- Approve Button in a Form to Send POST Request -->
+    <div class="flex justify-center">
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="bg-blue-500 mr-6 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300">
+          Approve
+        </button>
+      </form>
+      <a href="{% url 'customAdmin:newsellers' %}">
+        <button class="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300">
+          Cancel
+        </button>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

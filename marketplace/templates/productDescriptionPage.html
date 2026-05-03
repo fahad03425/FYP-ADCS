@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen py-12">
+     <div class="p-2"></div>
+    <div class="container mx-auto px-6 py-4 ">
+        <div class="bg-white shadow-lg rounded-lg mb-12 h-3/4">
+            {% include 'components/productDetailDesc.html' %}
+        </div>
+        <div class="flex flex-col lg:flex-row gap-8 mb-5">
+            <div class="lg:w-1/2 ">
+                {% include 'components/relatedModelDesc.html' %}
+            </div>
+            <div class="lg:w-1/2 pt-10">
+                {% include 'components/productTableDesc.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

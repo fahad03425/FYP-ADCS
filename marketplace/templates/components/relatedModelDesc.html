@@ -1,0 +1,15 @@
+<!-- Include the product Model description  -->
+{% load static %} 
+<div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-semibold mb-6 text-center text-gray-800">Related Models</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for model in related_models %}
+            <div class="p-4 bg-white border border-gray-200 rounded-lg hover:shadow-xl transform transition-all duration-200">
+                <a href="{% url 'marketplace:product_description_page' model.productID %}">
+                    <img src="{{ model.images.first.image.url }}" alt="{{ model.name }}" class="w-full h-40 object-cover rounded mb-4">
+                    <p class="text-center font-medium text-gray-700">{{ model.model }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>

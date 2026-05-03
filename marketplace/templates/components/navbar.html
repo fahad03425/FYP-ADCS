@@ -1,0 +1,125 @@
+{% load static %}
+<div class="bg-white border-gray-200 3xl:mx-custom-margin">
+  <div class="container mx-auto flex justify-between items-center py-2">
+    <div class="flex items-center">
+      <a href="/" class="flex items-center pl-3">
+        <img class="h-14" src="{% static 'logo.jpg' %}" alt="Logo" />
+      </a>
+    </div>
+
+    <div class="hidden lg:flex w-full items-center py-2 pl-3 justify-between">
+      <div class="flex-grow px-4 rounded">
+        <div class="relative w-full">
+       <form action="{% url 'marketplace:main_marketplace' %}" method="get" class="flex rounded bg-white border border-gray-300">
+        <div class="absolute inset-y-0 left-0 pl-2 flex items-center">
+            <img src="{% static 'search (2).png' %}" alt="search icon" class="w-4 h-4" />
+        </div>
+        <input
+            id="searchInput"
+            name="q"
+            class="border-0 w-full pl-8 pr-4 py-2 focus:ring-0 focus:outline-none"
+            type="search"
+            placeholder="Search..."
+            autocomplete="off"
+        />
+        <button class="bg-bluish text-white px-4 py-2 rounded-md" type="submit">
+            <img src="{% static 'search (1).png' %}" alt="search" class="h-9" />
+        </button>
+        </form>
+
+         <!-- Suggestions Dropdown -->
+         <ul id="suggestionsList" class="absolute z-10 bg-white border border-gray-300 mt-1 w-11/12 hidden rounded-md shadow-lg">
+        <!-- Suggestions will be dynamically added here -->
+         </ul>
+         </div>
+      </div>
+
+      <div class="cursor-pointer">
+        <a
+          href="/"
+          class="font-semibold hidden sm:inline text-nowrap hover:text-bluish hover:underline"
+        >
+          Specs Central
+        </a>
+      </div>
+    </div>
+
+    {% comment %} <div class="flex lg:hidden">
+      <div class="flex items-center gap-2 mr-3">
+        <img src="{% static 'search (2).png' %}" alt="search" class="w-5 h-5" />
+      </div>
+      <div class="pr-3">
+        <div class="flex items-center gap-2 cursor-pointer">
+          <img src="{% static 'log-out.png' %}" alt="user" class="w-5 h-5" />
+          <span class="hidden sm:inline">Sign In</span>
+        </div>
+      </div>
+    </div> {% endcomment %}
+  </div>
+</div>
+<div class="border-b"></div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("searchInput");
+    const suggestionsList = document.getElementById("suggestionsList");
+
+    searchInput.addEventListener("input", () => {
+        const query = searchInput.value.trim();
+
+        if (query.length < 2) {
+            suggestionsList.classList.add("hidden");
+            return;
+        }
+
+        fetch(`/marketplace/search-suggestions/?term=${encodeURIComponent(query)}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.length === 0) {
+                    suggestionsList.innerHTML = "<li class='py-2 px-4 text-gray-600'>No suggestions found</li>";
+                } else {
+                    suggestionsList.innerHTML = data
+                        .map(
+                            (item) =>
+                                `<li class="py-2 px-4 hover:bg-gray-100 hover:text-blue-600 cursor-pointer">${item}</li>`
+                        )
+                        .join("");
+                }
+                suggestionsList.classList.remove("hidden");
+
+                // Add click event to suggestion items
+                const suggestionItems = document.querySelectorAll("#suggestionsList li");
+                suggestionItems.forEach((item) => {
+                    item.addEventListener("click", () => {
+                        // Set the clicked suggestion in the search input
+                        searchInput.value = item.textContent;
+
+                        // Hide the suggestions list
+                        suggestionsList.classList.add("hidden");
+
+                        // Optionally, trigger the search form submission
+                        searchInput.closest("form").submit();
+                    });
+                });
+            })
+            .catch((error) => {
+                console.error("Error fetching suggestions:", error);
+                suggestionsList.innerHTML = "<li class='py-2 px-4 text-red-500'>Error fetching suggestions</li>";
+                suggestionsList.classList.remove("hidden");
+            });
+    });
+
+    // Hide suggestions when clicking outside the input or suggestions list
+    document.addEventListener("click", (event) => {
+        if (!searchInput.contains(event.target) && !suggestionsList.contains(event.target)) {
+            suggestionsList.classList.add("hidden");
+        }
+    });
+});
+</script>

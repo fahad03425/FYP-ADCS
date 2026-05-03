@@ -1,0 +1,65 @@
+{% extends 'portalbase.html' %}
+
+{% block title %}
+Seller|Payments
+{% endblock %}
+
+{% block pagetitle %}
+Payments
+{% endblock %}
+
+{% block vcontent %}
+<div class="flex-1 overflow-auto p-6">
+  <!-- Header -->
+  <div class="pl-10 pt-10 pr-10  h-screen w-full bg-white">
+  <header class=" bg-white  mb-2">
+    <h1 class="text-2xl font-bold text-gray-700">Your financial summary</h1>
+  </header>
+
+  <!-- Payment Summary Section -->
+  <div class="space-y-6">
+    <!-- Total Funds Card -->
+    <div class="bg-bluish pl-6 pb-20 pt-5 rounded-lg shadow-md ">
+      <h2 class="text-xl font-semibold text-white">Your total funds</h2>
+      <p class="text-5xl font-bold text-white">RS 0.00</p>
+    </div>
+
+    <!-- Available Funds Card -->
+    <div class="bg-gray-100 p-6 pb-14 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold text-gray-600">Available funds</h2>
+      <p class="text-2xl font-bold text-gray-800">RS 0.00</p>
+    </div>
+
+    <!-- Payment Method Section -->
+    <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Choose Payment Method:</h2>
+      <form action="#" method="POST">
+        <!-- Payment Number Input -->
+        <div class="mb-4">
+          <label for="number" class="block text-gray-700 font-semibold  text-lg pb-1">Number</label>
+          <input type="text" id="number" name="number" class="sm:w-full lg:w-1/5 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your number">
+        </div>
+
+        <!-- Radio Buttons for Payment Methods -->
+        <div class="mb-4">
+          <label class="block text-gray-700 font-semibold text-xl mb-2">Select Payment Method:</label>
+          <div class="flex items-center mb-2">
+            <input type="radio" id="easypaisa" name="payment_method" value="easypaisa" class="h-4 w-4 text-bluish focus:ring-bluish border-gray-300">
+            <label for="easypaisa" class="ml-2 text-gray-700 text-xl">Easypaisa</label>
+          </div>
+          <div class="flex items-center">
+            <input type="radio" id="jazzcash" name="payment_method" value="jazzcash" class="h-4 w-4 text-bluish focus:ring-bluish border-gray-300">
+            <label for="jazzcash" class="ml-2 text-gray-700 text-xl">Jazzcash</label>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="flex justify-end">
+        <button type="submit" class= "bg-bluish text-white font-semibold py-2 px-4 rounded-lg sm:w-full  lg:w-1/12  hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-bluish">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+</div>
+{% endblock %}

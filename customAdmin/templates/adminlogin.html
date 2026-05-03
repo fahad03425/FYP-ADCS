@@ -1,0 +1,46 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Login</title>
+    {% tailwind_css %}
+</head>
+<body>
+    <!-- Main Content with background image -->
+    <div class="h-screen flex items-center justify-center" style="background-image: url({% static 'blue.svg' %}); background-size: cover; background-repeat: no-repeat;">
+        <section class="w-full lg:w-1/3 mx-auto p-8 px-10 bg-white rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-bluish text-center mb-5">PhoneKart Admin</h2>
+            
+            {% if request.method == 'POST' and messages %}
+                {% for message in messages %}
+                    {% if 'permission' in message.message or 'Invalid username or password' in message.message %}
+                    <div class="mb-6 bg-redish border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <p class="text-center font-medium">{{ message }}</p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-base font-bold mb-2" for="username">Enter Username</label>
+                    <input class="shadow appearance-none border rounded w-full py-3 px-3 text-base text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" name="username" type="text" placeholder="Enter Username" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-base font-bold mb-2" for="password">Enter Password</label>
+                    <input class="shadow appearance-none border rounded w-full py-3 px-3 text-base text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="Enter Password" required>
+                </div>
+                <div class="text-center">
+                    <button class="bg-bluish mb-5 mt-4 text-white font-bold py-2 px-4 rounded w-full hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="submit">
+                        Login
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

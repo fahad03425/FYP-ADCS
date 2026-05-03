@@ -1,0 +1,42 @@
+{% load static %} {% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    {% tailwind_css %}
+    <style>
+      @view-transition {
+        navigation: auto;
+      }
+      body {
+        animation: fadeIn 0.4s ease-out forwards;
+      }
+      @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Include Top Banner -->
+    {% include 'components/topbar_banner.html' %}
+
+    <!-- Include Navbar -->
+    {% include 'components/navbar.html' %}
+
+    <!-- Content Section -->
+    <div class="container mx-auto">
+      {% block content %}
+      <!-- Page specific content goes here -->
+      {% endblock %}
+    </div>
+      {% block content2 %}
+      {% endblock %}
+
+
+    {% include 'components/footer.html' %}
+  </body>
+</html>
