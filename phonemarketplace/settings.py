@@ -98,12 +98,29 @@ WSGI_APPLICATION = 'phonemarketplace.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+TURSO_DATABASE_URL = os.environ.get('TURSO_DATABASE_URL', '')
+TURSO_AUTH_TOKEN = os.environ.get('TURSO_AUTH_TOKEN', '')
+
+if TURSO_DATABASE_URL and TURSO_AUTH_TOKEN:
+    # Production: use Turso (libSQL) cloud database — persists across Render restarts
+    DATABASES = {
+        'default': {
+            'ENGINE': 'libsql',
+            'NAME': 'phonemarketplace',
+            'OPTIONS': {
+                'url': TURSO_DATABASE_URL,
+                'auth_token': TURSO_AUTH_TOKEN,
+            },
+        }
     }
-}
+else:
+    # Local development: use SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
